@@ -7,7 +7,7 @@
 <style>
 body {
   margin: 0;
-  font-family: 'Poppins', Arial, sans-serif;
+  font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -95,7 +95,7 @@ button {
   position: relative;
 }
 
-/* ROMANTIC NEXT BUTTON */
+/* NEXT BUTTON */
 .romantic-btn {
   background: linear-gradient(135deg, #ff4d6d, #ff9ac6);
   border-radius: 50px;
@@ -112,30 +112,24 @@ button {
   min-height: 22px;
 }
 
-/* FINAL GIF */
-.final-gif {
-  width: 220px;
-  max-width: 80%;
-  margin-top: 25px;
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(255, 0, 100, 0.4);
-  animation: fadeIn 1.5s ease;
+/* LOVE TEXT */
+.love-text {
+  font-size: 18px;
+  color: #ff4d6d;
+  margin-top: 20px;
+  min-height: 28px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-/* FLOATING HEARTS */
-.heart {
+/* FLOATING HEARTS & ROSES */
+.floating {
   position: absolute;
-  animation: floatUp 4s linear infinite;
-  opacity: 0.8;
+  animation: floatUp 5s linear infinite;
+  opacity: 0.9;
 }
+
 @keyframes floatUp {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-100vh); opacity: 0; }
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
 }
 </style>
 </head>
@@ -149,7 +143,7 @@ button {
 <!-- SLIDE 1 -->
 <div class="slide active">
   <h1>Will you be my Valentine? 💕</h1>
-  <img src="images/her.jpeg" class="photo">
+  <img src="her.jpeg" class="photo">
 
   <div>
     <button id="yesBtn">Yes 😍</button>
@@ -163,10 +157,10 @@ button {
 <div class="slide">
   <h2>Our Beautiful Memories 💞</h2>
   <div class="gallery">
-    <img src="images/us1.jpeg">
-    <img src="images/us2.jpeg">
-    <img src="images/us3.jpeg">
-    <img src="images/us4.jpeg">
+    <img src="us1.jpeg">
+    <img src="us2.jpeg">
+    <img src="us3.jpeg">
+    <img src="us4.jpeg">
   </div>
   <button id="nextSlide" class="romantic-btn">Relive Our Love 💞</button>
 </div>
@@ -174,10 +168,9 @@ button {
 <!-- SLIDE 3 -->
 <div class="slide">
   <h1>💖 I LOVE YOU BUBU 💖</h1>
-  <h2>#Always & Forever 💍</h2>
-
-  <!-- 💕 ROMANTIC GIF -->
-  <img src="images/love.gif" alt="Love GIF" class="final-gif">
+  <h2>Always & Forever 💍</h2>
+  <p id="loveText" class="love-text"></p>
+</div>
 
 <!-- MUSIC -->
 <audio id="music" loop preload="auto">
@@ -191,6 +184,7 @@ const noBtn = document.getElementById('noBtn');
 const nextSlide = document.getElementById('nextSlide');
 const music = document.getElementById('music');
 const noMessage = document.getElementById('noMessage');
+const loveText = document.getElementById('loveText');
 
 const messages = [
   "Really? 🥺",
@@ -200,12 +194,12 @@ const messages = [
   "Okay… last chance 😭"
 ];
 
+const text = "You make my world softer, warmer, and brighter every day 🌹";
 let noCount = 0;
 
 /* MUSIC FADE IN */
 document.body.addEventListener('click', () => {
   music.volume = 0;
-  music.currentTime = 0;
   music.play();
   let v = 0;
   const fade = setInterval(() => {
@@ -215,12 +209,12 @@ document.body.addEventListener('click', () => {
   }, 80);
 }, { once: true });
 
-/* NO BUTTON TEASE */
+/* NO BUTTON */
 noBtn.addEventListener('mouseover', () => {
   noMessage.textContent = messages[Math.min(noCount, messages.length - 1)];
   noCount++;
-  noBtn.style.left = Math.random() * 250 + 'px';
-  noBtn.style.top = Math.random() * 80 + 'px';
+  noBtn.style.left = Math.random() * 200 + 'px';
+  noBtn.style.top = Math.random() * 60 + 'px';
 });
 
 /* SLIDES */
@@ -232,20 +226,33 @@ yesBtn.addEventListener('click', () => {
 nextSlide.addEventListener('click', () => {
   slides[1].classList.remove('active');
   slides[2].classList.add('active');
-  createHearts();
+  createLove();
+  typeLoveText();
 });
 
-function createHearts() {
+/* TYPING EFFECT */
+function typeLoveText() {
+  let i = 0;
+  loveText.textContent = "";
+  const typing = setInterval(() => {
+    loveText.textContent += text.charAt(i);
+    i++;
+    if (i >= text.length) clearInterval(typing);
+  }, 60);
+}
+
+/* HEARTS + ROSES */
+function createLove() {
   setInterval(() => {
-    const heart = document.createElement('div');
-    heart.className = 'heart';
-    heart.innerHTML = ['❤️','💖','💗','💕'][Math.floor(Math.random()*4)];
-    heart.style.left = Math.random() * window.innerWidth + 'px';
-    heart.style.top = window.innerHeight + 'px';
-    heart.style.fontSize = (20 + Math.random()*30) + 'px';
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 4000);
-  }, 120);
+    const item = document.createElement('div');
+    item.className = 'floating';
+    item.innerHTML = ['❤️','💖','💗','💕','🌹','🌹'][Math.floor(Math.random()*6)];
+    item.style.left = Math.random() * window.innerWidth + 'px';
+    item.style.top = window.innerHeight + 'px';
+    item.style.fontSize = (22 + Math.random()*28) + 'px';
+    document.body.appendChild(item);
+    setTimeout(() => item.remove(), 5000);
+  }, 150);
 }
 </script>
 
